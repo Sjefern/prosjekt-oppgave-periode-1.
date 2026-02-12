@@ -84,6 +84,17 @@ body {
     transform: translate(-50%, -50%) scale(1.02);
 }
 
+.tyggis {
+    position: absolute;      
+    top: 50px;
+    left: 50%;               
+    transform: translateX(-50%);
+    font-size: 28px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    
+}
+
 .footer {
     position: fixed;
     bottom: 0;
@@ -97,3 +108,4 @@ body {
     font-size: 16px;
     z-index: 1000;
 }
+
