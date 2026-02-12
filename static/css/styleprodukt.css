@@ -1,0 +1,65 @@
+/* Styling for tyggis.html produkter */
+.tyggisprodukterconteiner {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    padding: 40px 20px;
+    margin-top: 180px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tyggisboks {
+    background-color: #f9f9f9;
+    border: 2px solid rgb(0, 179, 255);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.tyggisboks:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 16px rgba(0, 179, 255, 0.3);
+}
+
+.tyggisbilde {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.tyggisnavn {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin: 10px 0 5px 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.tyggispris {
+    font-size: 16px;
+    color: rgb(0, 179, 255);
+    font-weight: bold;
+    margin: 5px 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.produktertittel {
+    font-size: 42px;
+    font-weight: bold;
+    color: rgb(0, 179, 255);
+    text-align: center;
+    margin: 40px 0 30px 0;
+    margin-top: 200px;
+    font-family: Arial, Helvetica, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 179, 255, 0.2);
+}

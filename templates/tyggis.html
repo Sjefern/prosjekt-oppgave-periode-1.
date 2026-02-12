@@ -1,3 +1,24 @@
 {% extends "base.html" %}
 
-{% block title %}søk{% endblock %}
+{% block title %}tyggis{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="/static/css/styleprodukt.css">
+
+<h1 class="produktertittel">Produkter</h1>
+
+<div class="tyggisprodukterconteiner"> 
+{% for tyggis in produkter %} 
+<div class="tyggisboks"> 
+        <!-- Gjør hele boksen klikkbar og link til produktdetaljsiden -->
+        <a href="{{ url_for('produkt', product_id=tyggis.id) }}" style="color:inherit;text-decoration:none;">
+            <img class="tyggisbilde" src="{{ tyggis.images[0] if tyggis.images else 'noimage.png' }}" alt="{{ tyggis.name }}"> 
+            <p class="tyggisnavn">{{ tyggis.name }}</p>
+        </a>
+        <p class="tyggispris">{{ tyggis.price }} kr</p>
+</div>
+{% endfor %} 
+</div>
+
+{% endblock %}
