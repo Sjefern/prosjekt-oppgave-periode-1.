@@ -1,0 +1,99 @@
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+body { 
+    margin: 0; 
+    padding: 0; 
+    padding-bottom: 60px;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar ul {
+    list-style-type: none;
+    background-color: rgb(0,179,255);
+    padding: 0;
+    margin: 0;
+    height: 150px;
+}
+
+.logo img {
+    position: absolute;
+    top: 50;
+    left: 0;
+    width: 150px;
+    height: auto;
+}
+
+.ikoner {
+    position: absolute;
+    top: 20px;
+    right: 0;
+    padding: 20px;
+}
+
+.bilder {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.bilder img {
+    height: 60px;
+    width: auto;
+    cursor: pointer;
+}
+
+.tyggisselgebilde {
+    margin-top: 150px;
+    width: 100%;
+    size: cover;
+    background-position: center;
+    position: fixed;
+}
+
+.tyggisknapp {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgb(0,179,255);
+    color: #fff;
+    padding: 14px 28px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+    text-decoration: none;
+    z-index: 1200;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.tyggisknapp:hover {
+    transform: translate(-50%, -50%) scale(1.02);
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgb(0,179,255);
+    color: black;
+    text-align: center;
+    padding: 15px 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    z-index: 1000;
+}

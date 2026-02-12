@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="no">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <title>Tyggis nettside</title>
+</head>
+
+<body>
+
+<header>
+    <nav class="navbar" aria-label="Hovedmeny">
+        <ul>
+
+            <div class="logo">
+                <li><a href="/"><img src="{{ url_for('static', filename='img/tyggislogopng.png') }}" alt="Tyggis nettside logo"></a></li>
+            </div>
+
+            <div class="ikoner">
+                <div class="bilder">
+                    <li><a href="/handlekurv"><img src="/static/img/handlekurvikon.png" alt="Handlekurv"></a></li>
+                    <li><a href="/sokedatabase"><img src="/static/img/søkikon.png" alt="Søk"></a></li>
+                    <li><a href="/kontakt"><img src="/static/img/brukerikon.png" alt="Bruker"></a></li>
+                </div>
+            </div>
+
+        </ul>
+    </nav>
+</header>
+
+<main id="main-content">
+
+    <section class="tyggisselgebilde">
+        <img src="{{ url_for('static', filename='img/tyggishyller.png') }}"
+             alt="Hyller med ulike typer tyggis i butikk">
+        <a href="/tyggis" class="tyggisknapp">Tyggis</a>
+    </section>
+
+    {% block content %}{% endblock %}
+
+</main>
+
+<footer class="footer">
+    <p class="tekstfooter">Tyggis nettside</p>
+</footer>
+
+</body>
+</html>
