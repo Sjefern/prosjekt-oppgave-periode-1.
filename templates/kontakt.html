@@ -1,3 +1,49 @@
 {% extends "base.html" %}
 
 {% block title %}Kontakt{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="/static/css/stylekontakt.css">
+
+<div class="contact-container">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-messages">
+        {% for category, msg in messages %}
+        <div class="flash-message flash-{{ category }}">{{ msg }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    {% if user_id %}
+    <h1>Du er logget inn</h1>
+    <p class="welcome-text">
+        Velkommen, <strong>{{ user_email }}</strong>!
+    </p>
+    <a href="{{ url_for('logout') }}" class="logout-button">Logg ut</a>
+
+    {% else %}
+    <h1>Logg inn</h1>
+
+    <form method="post" action="{{ url_for('kontakt') }}" class="login-form">
+
+        <label for="email">Epost</label>
+        <input id="email" name="email" type="email" required>
+
+        <label for="password">Passord</label>
+        <input id="password" name="password" type="password" required>
+
+        <button type="submit" class="login-button">Logg inn</button>
+    </form>
+
+    <p class="register-text">
+        Ikke bruker? <a href="{{ url_for('register') }}">Registrer deg her</a>
+    </p>
+    {% endif %}
+
+</div>
+
+{% endblock %}

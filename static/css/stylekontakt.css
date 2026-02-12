@@ -1,0 +1,189 @@
+/* Container */
+.contact-container {
+    max-width: 420px;
+    margin: 180px auto 60px auto;
+    padding: 40px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 179, 255, 0.15);
+    border: 2px solid rgb(0, 179, 255);
+}
+
+.contact-container h1 {
+    color: rgb(0, 179, 255);
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Flash messages */
+.flash-messages {
+    margin-bottom: 20px;
+}
+
+/* Logged-in text */
+.welcome-text {
+    font-size: 16px;
+    margin: 20px 0;
+    color: #333;
+    text-align: center;
+}
+
+/* Login form */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.login-form label {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.login-form input {
+    padding: 12px 14px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-form input:focus {
+    outline: none;
+    border-color: rgb(0, 179, 255);
+    box-shadow: 0 0 8px rgba(0, 179, 255, 0.3);
+}
+
+/* Buttons */
+.login-button,
+.logout-button {
+    display: inline-block;
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    background: rgb(0, 179, 255);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-button:hover,
+.logout-button:hover {
+    background: #0056cc;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 179, 255, 0.3);
+}
+
+.login-button:active,
+.logout-button:active {
+    transform: translateY(0);
+}
+
+/* Register link */
+.register-text {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.register-text a {
+    color: rgb(0, 179, 255);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.register-text a:hover {
+    color: #0056cc;
+    text-decoration: underline;
+}
+
+/* Lenker */
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Body */
+body {
+    margin: 0;
+    padding: 0;
+    padding-bottom: 60px;
+}
+
+/* Container */
+.container {
+    max-width: 600px;
+    margin: 160px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Flash-meldinger */
+.flash-messages {
+    margin-bottom: 12px;
+}
+
+.flash-message {
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Suksess-meldinger (grønn) */
+.flash-success {
+    background: #d4edda;
+    border: 2px solid #28a745;
+    color: #155724;
+}
+
+/* Feil-meldinger (rød) */
+.flash-error {
+    background: #ffecec;
+    border: 2px solid #ff9b9b;
+    color: #721c24;
+}
+
+/* Registreringsskjema */
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.register-form input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.register-button {
+    background: rgb(0, 179, 255);
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* Ekstra styling som lå inline */
+.login-link {
+    text-align: center;
+    margin-top: 20px;
+}

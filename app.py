@@ -1,8 +1,13 @@
 from flask import Flask, render_template, request, session, redirect, url_for, flash
-import os
+from db import (
+    verify_user,
+    get_user_by_email,
+    create_user,
+    init_db,
+)
 
 app = Flask(__name__)
-
+app.secret_key = "en_lang_og_hemmelig_nøkkel_her"  # For sikre sessions
 
 PRODUCTS = [
     {"id": 1, "name": "Mint Gum", "images": ["/static/img/Mintextra.png"], "price": 29, "description": "En frisk tyggegummi med sterk mintsmak."},
@@ -28,20 +33,65 @@ def produkt():
     return render_template('product.html')
 
 @app.route('/handlekurv')
-def jandlekurv():
+def handlekurv():
     return render_template('handlekurv.html')
 
-@app.route('/kontakt')
+@app.route('/kontakt', methods=['GET', 'POST'])
 def kontakt():
-    return render_template('kontakt.html')
+    if request.method == 'POST':
+        email = request.form.get('email', '').strip()
+        password = request.form.get('password', '')
+
+        if verify_user(email, password):
+            user = get_user_by_email(email)
+            session['user_id'] = user['id']
+            session['user_email'] = user['email']
+
+            flash('Innlogging vellykket.', 'success')
+            return redirect(url_for('index'))
+
+        flash('Feil epost eller passord. Prøv igjen.', 'error')
+
+    user_id = session.get('user_id')
+    user_email = session.get('user_email')
+    return render_template('kontakt.html', user_id=user_id, user_email=user_email)
+
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    session.pop('user_email', None)
+    flash('Du er nå logget ut.', 'success')
+    return redirect(url_for('kontakt'))
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form.get('username', '').strip()
+        email = request.form.get('email', '').strip()
+        password = request.form.get('password', '')
+        password2 = request.form.get('password2', '')
+
+        if not username or not email or not password:
+            flash('Fyll ut alle felt.', 'error')
+            return render_template('register.html')
+
+        if password != password2:
+            flash('Passordene matcher ikke.', 'error')
+            return render_template('register.html')
+
+        created = create_user(username, email, password)
+        if not created:
+            flash('Epost er allerede registrert. Prøv å logge inn.', 'error')
+            return render_template('register.html')
+
+        flash('Registrering vellykket. Logg inn for å fortsette.', 'success')
+        return redirect(url_for('kontakt'))
+
+    return render_template('register.html')
 
 @app.route('/sokedatabase')
 def sokedatabase():
     return render_template('sokedatabase.html')
-
-@app.route('/register')
-def register():
-    return render_template('register.html')
 
 @app.route('/bestillinger')
 def bestillinger():
