@@ -31,5 +31,9 @@ def register():
 def bestillinger():
     return render_template('bestillinger.html')
 
+@app.route('/tyggis')
+def tyggis():
+    return render_template('tyggis.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
