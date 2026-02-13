@@ -1,3 +1,53 @@
 {% extends "base.html" %}
 
 {% block title %}Handlekurv{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="/static/css/stylehandle.css">
+
+<div class="cart-container">
+    <h1>Handlekurv</h1>
+
+    {% if items and items|length > 0 %}
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th class="col-product">Produkt</th>
+                <th class="col-price">Pris</th>
+                <th class="col-quantity">Antall</th>
+                <th class="col-sum">Sum</th>
+                <th class="col-action"></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for it in items %}
+            <tr>
+                <td class="cell-product">{{ it.name }}</td>
+                <td class="cell-price">{{ it.price }} kr</td>
+                <td class="cell-quantity">{{ it.quantity }}</td>
+                <td class="cell-sum">{{ it.price * it.quantity }} kr</td>
+                <td class="cell-action">
+                    <form method="post" action="{{ url_for('remove_from_cart', product_id=it.id) }}"
+                        class="remove-form">
+                        <button type="submit" class="remove-button">Fjern</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <td class="total-label" colspan="3">Total</td>
+                <td class="total-value">{{ total }} kr</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    {% else %}
+    <p class="cart-empty">Handlekurven er tom.</p>
+    {% endif %}
+</div>
+{% endblock %}

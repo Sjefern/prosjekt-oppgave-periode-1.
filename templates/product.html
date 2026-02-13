@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="/static/css/styleprodukt.css">
+
+<div class="product-detail-container">
+    <div class="product-detail-content">
+        <div class="product-image-section">
+            <img src="{{ product.images[0] if product.images else '/static/img/noimage.png' }}" alt="{{ product.name }}"
+                class="product-detail-image">
+        </div>
+
+        <div class="product-info-section">
+            <h1 class="product-detail-name">{{ product.name }}</h1>
+            <p class="product-detail-description">{{ product.description }}</p>
+            <p class="product-detail-price">{{ product.price }} kr</p>
+
+            <form method="post" action="{{ url_for('add_to_cart', product_id=product.id) }}" class="add-to-cart-form">
+                <div class="quantity-selector">
+                    <label for="quantity">Antall:</label>
+                    <input type="number" id="quantity" name="quantity" value="1" min="1" max="99" required>
+                </div>
+
+                <button type="submit" class="add-to-cart-button">Legg til i handlekurv</button>
+            </form>
+
+            <a href="{{ url_for('tyggis') }}" class="back-to-products">← Tilbake til produkter</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

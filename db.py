@@ -2,6 +2,7 @@ import sqlite3
 import hashlib
 import os
 
+# Database file path
 DB_FILE = 'tyggis.db'
 
 def dict_factory(cursor, row):
@@ -26,7 +27,7 @@ def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
 def init_db():
-    """utfører database tabeller"""
+    """Initialiserer database tabeller"""
     conn = get_db_connection()
     if not conn:
         print("Kunne ikke koble til database")
@@ -58,7 +59,7 @@ def init_db():
             )
         ''')
         
-        # Lag orders tabell
+        # Lag orders-tabell
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS orders (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -158,3 +159,145 @@ def verify_user(email, password):
     finally:
         conn.close()
 
+def add_cart_item(user_id, product_id, quantity):
+    """Legg til produkt i handlekurv"""
+    conn = get_db_connection()
+    if not conn:
+        return False
+    
+    try:
+        cursor = conn.cursor()
+        
+        # Sjekk om produktet allerede er i kurven
+        cursor.execute(
+            'SELECT id, quantity FROM cart WHERE user_id = ? AND product_id = ?',
+            (user_id, product_id)
+        )
+        item = cursor.fetchone()
+        
+        if item:
+            # Oppdater antall
+            new_quantity = item['quantity'] + quantity
+            cursor.execute(
+                'UPDATE cart SET quantity = ? WHERE user_id = ? AND product_id = ?',
+                (new_quantity, user_id, product_id)
+            )
+        else:
+            # Legg til nytt produkt
+            cursor.execute(
+                'INSERT INTO cart (user_id, product_id, quantity) VALUES (?, ?, ?)',
+                (user_id, product_id, quantity)
+            )
+        
+        conn.commit()
+        return True
+        
+    except Exception as e:
+        print(f"Add cart item error: {e}")
+        return False
+    finally:
+        conn.close()
+
+def get_cart_items_for_user(user_id):
+    """Hent handlekurv for bruker"""
+    conn = get_db_connection()
+    if not conn:
+        return []
+    
+    try:
+        cursor = conn.cursor()
+        cursor.execute(
+            'SELECT product_id, quantity FROM cart WHERE user_id = ?',
+            (user_id,)
+        )
+        items = cursor.fetchall()
+        return items
+        
+    except Exception as e:
+        print(f"Get cart items error: {e}")
+        return []
+    finally:
+        conn.close()
+
+def remove_cart_item_for_user(user_id, product_id):
+    """Fjern produkt fra handlekurv"""
+    conn = get_db_connection()
+    if not conn:
+        return False
+    
+    try:
+        cursor = conn.cursor()
+        cursor.execute(
+            'DELETE FROM cart WHERE user_id = ? AND product_id = ?',
+            (user_id, product_id)
+        )
+        conn.commit()
+        return True
+        
+    except Exception as e:
+        print(f"Remove cart item error: {e}")
+        return False
+    finally:
+        conn.close()
+
+def clear_cart_for_user(user_id):
+    """Tøm hele handlekurven"""
+    conn = get_db_connection()
+    if not conn:
+        return False
+    
+    try:
+        cursor = conn.cursor()
+        cursor.execute('DELETE FROM cart WHERE user_id = ?', (user_id,))
+        conn.commit()
+        return True
+        
+    except Exception as e:
+        print(f"Clear cart error: {e}")
+        return False
+    finally:
+        conn.close()
+
+def create_order(user_id, cart_items, products_dict):
+    """Lag en ordre fra handlekurv"""
+    conn = get_db_connection()
+    if not conn:
+        return None
+    
+    try:
+        cursor = conn.cursor()
+        
+        # Beregn total pris
+        total_price = 0
+        for item in cart_items:
+            product = products_dict.get(item['product_id'])
+            if product:
+                total_price += product['price'] * item['quantity']
+        
+        # Opprett ordre
+        cursor.execute(
+            'INSERT INTO orders (user_id, total_price) VALUES (?, ?)',
+            (user_id, total_price)
+        )
+        order_id = cursor.lastrowid
+        
+        # Legg til order items
+        for item in cart_items:
+            product = products_dict.get(item['product_id'])
+            if product:
+                cursor.execute(
+                    'INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)',
+                    (order_id, item['product_id'], item['quantity'], product['price'])
+                )
+        
+        conn.commit()
+        return order_id
+        
+    except Exception as e:
+        print(f"Create order error: {e}")
+        return None
+    finally:
+        conn.close()
+
+# Initialiserer database når modulen importeres
+init_db()

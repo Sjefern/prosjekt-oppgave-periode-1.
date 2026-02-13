@@ -4,6 +4,9 @@ from db import (
     get_user_by_email,
     create_user,
     init_db,
+    add_cart_item,
+    get_cart_items_for_user,
+    remove_cart_item_for_user,
 )
 
 app = Flask(__name__)
@@ -30,11 +33,78 @@ def index():
 
 @app.route('/produkt')
 def produkt():
-    return render_template('product.html')
+    product_id = request.args.get('product_id', type=int)
+    
+    if not product_id:
+        flash('Produkt ikke funnet.', 'error')
+        return redirect(url_for('tyggis'))
+    
+    product = next((p for p in PRODUCTS if p['id'] == product_id), None)
+    
+    if not product:
+        flash('Produkt ikke funnet.', 'error')
+        return redirect(url_for('tyggis'))
+    
+    return render_template('product.html', product=product)
+
+@app.route('/add_to_cart/<int:product_id>', methods=['POST'])
+def add_to_cart(product_id):
+    user_id = session.get('user_id')
+    
+    if not user_id:
+        flash('Du må logge inn for å legge produkter i handlekurven.', 'error')
+        return redirect(url_for('kontakt'))
+    
+    quantity = request.form.get('quantity', 1, type=int)
+    
+    if quantity < 1:
+        flash('Antall må være minst 1.', 'error')
+        return redirect(url_for('produkt', product_id=product_id))
+    
+    add_cart_item(user_id, product_id, quantity)
+    flash('Produkt lagt til i handlekurven!', 'success')
+    return redirect(url_for('handlekurv'))
 
 @app.route('/handlekurv')
 def handlekurv():
-    return render_template('handlekurv.html')
+    user_id = session.get('user_id')
+    
+    if not user_id:
+        flash('Du må logge inn for å se handlekurven.', 'error')
+        return redirect(url_for('kontakt'))
+    
+    # Hent handlekurv fra database
+    cart_items = get_cart_items_for_user(user_id)
+    
+    # Bygg liste med produktinfo
+    items = []
+    total = 0
+    
+    for cart_item in cart_items:
+        product = next((p for p in PRODUCTS if p['id'] == cart_item['product_id']), None)
+        if product:
+            item = {
+                'id': product['id'],
+                'name': product['name'],
+                'price': product['price'],
+                'quantity': cart_item['quantity']
+            }
+            items.append(item)
+            total += product['price'] * cart_item['quantity']
+    
+    return render_template('handlekurv.html', items=items, total=total)
+
+@app.route('/remove_from_cart/<int:product_id>', methods=['POST'])
+def remove_from_cart(product_id):
+    user_id = session.get('user_id')
+    
+    if not user_id:
+        flash('Du må logge inn.', 'error')
+        return redirect(url_for('kontakt'))
+    
+    remove_cart_item_for_user(user_id, product_id)
+    flash('Produkt fjernet fra handlekurven.', 'success')
+    return redirect(url_for('handlekurv'))
 
 @app.route('/kontakt', methods=['GET', 'POST'])
 def kontakt():
@@ -47,8 +117,20 @@ def kontakt():
             session['user_id'] = user['id']
             session['user_email'] = user['email']
 
+            # Migrer session-cart til DB
+            sess_cart = session.get('cart', {})
+            for k, v in sess_cart.items():
+                try:
+                    pid = int(k)
+                    qty = int(v.get('quantity', 0))
+                except Exception:
+                    continue
+                if qty > 0:
+                    add_cart_item(user['id'], pid, qty)
+
+            session.pop('cart', None)
             flash('Innlogging vellykket.', 'success')
-            return redirect(url_for('index'))
+            return redirect(url_for('tyggis'))
 
         flash('Feil epost eller passord. Prøv igjen.', 'error')
 
